@@ -43,7 +43,7 @@ async def groups_api():
             return json.dumps({"error": "zip code must be an integer"})
 
         if radius not in ("2", "5", "10", "25", "50", "100", "any"):
-            return json.dumps({"error", "radius must be (2, 5, 10, 25, 50, 100, any)"})
+            return json.dumps({"error": "radius must be (2, 5, 10, 25, 50, 100, any)"})
 
         if category not in ("environment", "mental_health", "lgbtq", "diversity_inclusion"):
             return json.dumps({"error": "category must be (environment, mental_health, lgbtq, diversity_inclusion)"})
