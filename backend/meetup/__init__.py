@@ -1,5 +1,4 @@
-from .meetup import MeetUp
-from .group import GroupCategory
+from .group import Group, GroupCategory
 
 
-__all__ = ['MeetUp', 'GroupCategory']
+__all__ = ['Group', 'GroupCategory']

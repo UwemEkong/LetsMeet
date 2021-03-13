@@ -8,6 +8,8 @@ from typing import List, Optional
 from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
 
+from .event import Event
+
 
 GROUP_URL = "https://www.meetup.com/find/{}/?allMeetups=true&userFreeform={}&radius={}"
 
@@ -23,14 +25,25 @@ class GroupCategory(str, Enum):
 class Group:
     name: str
     url: str
-    image_url: Optional[str]
+    image_url: str
     members: int
 
-    def __repr__(self):
-        return f"<Group name={self.name}>"
+    description: Optional[str]
+    events: Optional[List[Event]]
+
+    def to_dict(self):
+        ret = {
+            "name": self.name,
+            "url": self.url,
+            "image_url": self.image_url,
+            "members": self.members,
+            "description": self.description
+        }
+        ret["events"] = [e.to_dict() for e in self.events] if self.events is not None else None
+        return ret
 
     @staticmethod
-    def _extract_name(card) -> Optional[str]:
+    def _extract_name_from_card(card) -> Optional[str]:
         name = card.find("h3")
         if not name:
             return
@@ -39,7 +52,7 @@ class Group:
         return re.sub(r" +", " ", name)
 
     @staticmethod
-    def _extract_url(card) -> Optional[str]:
+    def _extract_url_from_card(card) -> Optional[str]:
         url = card.find("a", class_="display-none")
         if not url or not url.get("href"):
             return
@@ -47,7 +60,7 @@ class Group:
         return url["href"]
 
     @staticmethod
-    def _extract_image_url(card) -> Optional[str]:
+    def _extract_image_url_from_card(card) -> Optional[str]:
         image_elem = card.find("a", class_="groupCard--photo")
         if not image_elem or not image_elem.get("style"):
             return
@@ -59,7 +72,7 @@ class Group:
         return image_re.group(1)
 
     @staticmethod
-    def _extract_members(card) -> Optional[int]:
+    def _extract_members_from_card(card) -> Optional[int]:
         member_elem = card.find("p", class_="small")
         if not member_elem:
             return
@@ -71,6 +84,88 @@ class Group:
 
         return int(number_part)
 
+    @staticmethod
+    def _extract_name_from_page(page) -> Optional[str]:
+        title_elem = page.find("a", class_="groupHomeHeader-groupNameLink")
+        if not title_elem or not title_elem.get("href"):
+            return
+
+        return title_elem.text.strip()
+
+    @staticmethod
+    def _extract_image_url_from_page(page) -> Optional[str]:
+        image_elem = page.find("div", class_="groupHomeHeader-banner")
+        if not image_elem or not image_elem.get("style"):
+            return
+
+        image_re = re.search(r"background-image: url\((.+)\)", image_elem["style"])
+        if image_re is None:
+            return
+
+        return image_re.group(1)
+
+    @staticmethod
+    def _extract_members_from_page(page) -> Optional[str]:
+        member_elem = page.find("a", class_="groupHomeHeaderInfo-memberLink").find("span")
+        if not member_elem:
+            return
+
+        number_part, *_ = member_elem.text.strip().split(" ")
+        number_part = number_part.replace(",", "")
+        if not number_part.isdigit():
+            return
+
+        return int(number_part)
+
+    @staticmethod
+    def _extract_desc_from_page(page) -> Optional[str]:
+        elems = page.find_all("p", class_="group-description")
+        desc = None
+        for elem in elems:
+            text = elem.text.strip()
+            if text:
+                desc = text
+                break
+
+        return desc
+
+    @classmethod
+    async def from_url(cls, url: str) -> Optional[Group]:
+        """
+        """
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
+            page = await browser.new_page()
+            await page.goto(url)
+            content = await page.content()
+            await browser.close()
+
+        soup = BeautifulSoup(content, "html.parser")
+
+        name = Group._extract_name_from_page(soup)
+        if not name:
+            return
+
+        image_url = Group._extract_image_url_from_page(soup)
+        if not image_url:
+            return
+
+        members = Group._extract_members_from_page(soup)
+        if not members:
+            return
+
+        desc = Group._extract_desc_from_page(soup)
+        if not desc:
+            return
+
+        return Group(
+            name=name,
+            url=url,
+            image_url=image_url,
+            members=members,
+            description=desc,
+            events=Event.from_group_page(soup)
+        )
 
     @classmethod
     async def search(cls, category: GroupCategory, zip: int, radius: str) -> List[Group]:
@@ -80,6 +175,10 @@ class Group:
             browser = await p.chromium.launch()
             page = await browser.new_page()
             await page.goto(GROUP_URL.format(category, zip, radius))
+            exists = await page.query_selector("text=Show more")
+            while exists:
+                await page.click("text=Show more")
+                exists = await page.query_selector("text=Show more")
             content = await page.content()
             await browser.close()
 
@@ -88,19 +187,19 @@ class Group:
         groups = []
 
         for card in group_cards:
-            name = Group._extract_name(card)
+            name = Group._extract_name_from_card(card)
             if not name:
                 continue
 
-            url = Group._extract_url(card)
+            url = Group._extract_url_from_card(card)
             if not url:
                 continue
 
-            image_url = Group._extract_image_url(card)
+            image_url = Group._extract_image_url_from_card(card)
             if not image_url:
                 continue
 
-            members = Group._extract_members(card)
+            members = Group._extract_members_from_card(card)
             if not members:
                 continue
 
@@ -108,7 +207,9 @@ class Group:
                 name=name,
                 url=url,
                 image_url=image_url,
-                members=members
+                members=members,
+                description=None,
+                events=None
             ))
 
         return groups
