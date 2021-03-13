@@ -11,6 +11,7 @@ Python 3.7+ required
 $ python -m venv backend\.venv  # Sets up a new virtual environment in the backend folder.
 $ backend\.venv\Scripts\activate  # Puts you into the new virtual environment.
 $ pip install -r backend\requirements.txt  # Installs the requirements for running.
+$ python -m playwright install  # Installs the necessary dependencies for running playwright.
 ```
 
 #### Running
