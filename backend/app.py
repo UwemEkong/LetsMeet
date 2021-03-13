@@ -2,7 +2,7 @@ import json
 
 from quart import Quart
 
-from .meetup import MeetUp, MeetUpCategory
+from .meetup import MeetUp, GroupCategory
 
 
 app = Quart(__name__)
@@ -16,8 +16,8 @@ async def setup_meetup():
 @app.route("/", methods=["GET"])
 async def index():
     groups = await app.meetup.get_groups(
-        MeetUpCategory.lgbtq,
+        GroupCategory.lgbtq,
         60532,
         "25"
     )
-    return json.dumps(groups)
+    return json.dumps(groups[0].members)
