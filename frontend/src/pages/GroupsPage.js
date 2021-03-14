@@ -28,23 +28,31 @@ const GroupsPage = ({ results, setResults, formParams }) => {
         })
     }
 
-
+    function getColor() {
+        return "hsla(" + ~~(360 * Math.random()) + "," +
+            "70%," +
+            "80%,1)";
+    }
     return (
         <>
             <Modal show={Object.keys(highlighted).length !== 0} onHide={handleClose}>
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title>{highlighted.name}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+                <Modal.Header>
+                    <Image  style={{backgroundColor:getColor(), backgroundImage: `url(${highlighted.image_url})`,width:"200px",height:"200px", margin:"auto" }} src={highlighted.image_url} thumbnail />
+                </Modal.Header>
+                <Modal.Body>{highlighted.description}</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
-          </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
-          </Button>
+                    </Button>
+                    <Button href={highlighted.url} target="_blank" variant="info" onClick={handleClose}>
+                        Join Group!
+                    </Button>
                 </Modal.Footer>
             </Modal>
+
             <div className="container">
                 <div className="mx-auto text-center mb-3">
                     <ul className="nav nav-tabs nav-fill">
