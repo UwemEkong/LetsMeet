@@ -3,8 +3,13 @@ import Group from '../components/Group';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 
 const GroupsPage = ({ results, setResults, formParams }) => {
+
+    const [highlighted, setHighlighted] = useState({});
+
+    const handleClose = () => setHighlighted({});
 
     const history = useHistory();
 
@@ -26,6 +31,20 @@ const GroupsPage = ({ results, setResults, formParams }) => {
 
     return (
         <>
+            <Modal show={Object.keys(highlighted).length !== 0} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{highlighted.name}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+          </Button>
+                    <Button variant="primary" onClick={handleClose}>
+                        Save Changes
+          </Button>
+                </Modal.Footer>
+            </Modal>
             <div className="container">
                 <div className="mx-auto text-center mb-3">
                     <ul className="nav nav-tabs nav-fill">
@@ -41,12 +60,8 @@ const GroupsPage = ({ results, setResults, formParams }) => {
                 {results.map((group) => {
                     return (
                         <Group
-                            name={group.name}
-                            url={group.url}
-                            image_url={group.image_url}
-                            members={group.members}
-                            description={group.description}
-                            events={group.events}
+                            group={group}
+                            setHighlighted={setHighlighted}
                         />
                     )
                 })}
