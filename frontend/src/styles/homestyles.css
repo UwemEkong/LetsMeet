@@ -1,8 +1,5 @@
-* {
-    background-color:black
-}
 
-.btn  {
-    background-color: red;
-    color: black
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #1502F1 !important;
+    border-color: black;
 }

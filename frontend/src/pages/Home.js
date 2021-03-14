@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import './homestyles.css';
+import '../styles/homestyles.css';
 import logo from '../assets/logo.svg';
 const Home = ()=>{
   return(
