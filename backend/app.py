@@ -37,7 +37,7 @@ async def groups_api():
         category = GroupCategory[category]
 
         groups = await Group.search(category, zip, radius)
-        return [g.to_dict() for g in groups], 200
+        return json.dumps([g.to_dict() for g in groups]), 200
     else:
         return {"error": "invalid arguments"}, 400
 
