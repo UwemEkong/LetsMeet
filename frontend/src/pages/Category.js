@@ -5,25 +5,33 @@ import environment from "../assets/environment.svg";
 import diversity from "../assets/diversity.svg";
 import health from "../assets/health.svg";
 import lgbt from "../assets/lgbt.svg";
-
+import {Link} from "react-router-dom";
 
 const Category = () => {
+
+    let chosenCategory = "";
 
     const [selected, setSelected] = useState(-1);
 
     const clickHandler1 = () => {
+        console.log(chosenCategory)
+        chosenCategory="environment"
         setSelected(0)
+        
     }
 
     const clickHandler2 = () => {
+        chosenCategory="diversity"
         setSelected(1)
     }
 
     const clickHandler3 = () => {
+        chosenCategory="mentalhealth"
         setSelected(2)
     }
 
     const clickHandler4 = () => {
+        chosenCategory="lgbtq"
         setSelected(3)
     }
 
@@ -67,8 +75,8 @@ const Category = () => {
                         </Card>
                 </Col>
                 </Row>
- 
-                <button style={{marginLeft:"80%"}}type="button" class="btn btn-primary btn-lg">Next</button>
+                
+                <Link to={"/form"}><button style={{marginLeft:"80%"}}type="button" class="btn btn-primary btn-lg">Next</button></Link>
              
             </Container>
 

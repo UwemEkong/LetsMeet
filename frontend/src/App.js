@@ -15,7 +15,7 @@ function App() {
       </Route>
       <Route path="/categories" component={Category} /> 
 
-      <Route path="/form">
+      <Route path="/form/:category">
         <Form/>
       </Route>
       <Route path="/events">
