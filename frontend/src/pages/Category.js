@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import '../styles/categorystyles.css';
 import { Card, Container, Row, Col } from "react-bootstrap";
 import environment from "../assets/environment.svg";
@@ -9,30 +9,31 @@ import {Link} from "react-router-dom";
 
 const Category = () => {
 
-    let chosenCategory = "";
-
     const [selected, setSelected] = useState(-1);
 
+    const [category, setCategory] = useState("");
+
     const clickHandler1 = () => {
-        console.log(chosenCategory)
-        chosenCategory="environment"
+
         setSelected(0)
+        setCategory("environment")
         
     }
 
     const clickHandler2 = () => {
-        chosenCategory="diversity"
         setSelected(1)
+        setCategory("diversity")
     }
 
     const clickHandler3 = () => {
-        chosenCategory="mentalhealth"
         setSelected(2)
+        setCategory("mentalhealth")
     }
 
     const clickHandler4 = () => {
-        chosenCategory="lgbtq"
+        //chosenCategory="lgbtq"
         setSelected(3)
+        setCategory("lgbtq")
     }
 
     return (
@@ -76,10 +77,10 @@ const Category = () => {
                 </Col>
                 </Row>
                 
-                <Link to={"/form"}><button style={{marginLeft:"80%"}}type="button" class="btn btn-primary btn-lg">Next</button></Link>
+                <Link to={"/form/" + category}><button style={{marginLeft:"80%"}}type="button" class="btn btn-primary btn-lg">Next</button></Link>
              
             </Container>
-
+        
 
 
             {/* <div class="container">
@@ -107,7 +108,9 @@ const Category = () => {
               </div>
         </div> */}
         </>
+        
     )
+    
 }
 
 export default Category;
