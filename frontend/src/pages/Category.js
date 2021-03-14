@@ -22,12 +22,12 @@ const Category = () => {
 
     const clickHandler2 = () => {
         setSelected(1)
-        setCategory("diversity")
+        setCategory("diversity_inclusion")
     }
 
     const clickHandler3 = () => {
         setSelected(2)
-        setCategory("mentalhealth")
+        setCategory("mental_health")
     }
 
     const clickHandler4 = () => {

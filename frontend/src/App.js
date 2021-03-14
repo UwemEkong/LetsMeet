@@ -1,5 +1,5 @@
-import './App.css';
 import {BrowserRouter as Router, Route, Switch, Link} from "react-router-dom";
+import { useState } from 'react';
 import Home from './pages/Home';
 import Category from './pages/Category';
 import Form from './pages/Form';
@@ -8,6 +8,8 @@ import GroupsPage from './pages/GroupsPage';
 import Logo from './components/Logo';
 
 function App() {
+  const [eventResults, setEventResults] = useState([]);
+
   return (
    
     <Router>
@@ -20,10 +22,10 @@ function App() {
       <Route path="/categories" component={Category} />
 
       <Route path="/form/:category">
-        <Form/>
+        <Form setEventResults={setEventResults}/>
       </Route>
       <Route path="/events">
-        <EventsPage/>
+        <EventsPage eventResults={eventResults}/>
       </Route>
       <Route path="/groups">
         <GroupsPage/>
