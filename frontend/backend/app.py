@@ -1,12 +1,16 @@
 import json
 
+import aiohttp
 from quart import Quart, request, render_template
 
-from backend.meetup.event import Event
-
-from .meetup import Group, GroupCategory
+from .meetup import Category, Group, Event
 
 app = Quart(__name__)
+
+
+@app.before_serving
+async def setup_session():
+    app.session = aiohttp.ClientSession()
 
 
 @app.errorhandler(404)
@@ -14,16 +18,15 @@ async def not_found(err):
     return await render_template("index.html")
 
 
+@app.route("/test/<string:zip>")
+async def test(zip: str):
+    return json.dumps(await Group.search(Category.environment, zip, "25"))
+
+
+
 @app.route("/api/groups", methods=["GET"])
 async def groups_api():
-    if "url" in request.args:
-        url = request.args["url"]
-        group = await Group.from_url(url)
-        if group is None:
-            return {"error": "group with specified url not found"}, 400
-
-        return group.to_dict()
-    elif all(arg in request.args for arg in ("category", "zip", "radius")):
+    if all(arg in request.args for arg in ("category", "zip", "radius")):
         category = request.args["category"]
         zip = request.args["zip"]
         radius = request.args["radius"]
@@ -39,7 +42,7 @@ async def groups_api():
         if category not in ("environment", "mental_health", "lgbtq", "diversity_inclusion"):
             return {"error": "category must be one of (environment, mental_health, lgbtq, diversity_inclusion)"}, 400
 
-        category = GroupCategory[category]
+        category = Category[category]
 
         groups = await Group.search(category, zip, radius)
         return json.dumps([g.to_dict() for g in groups]), 200
@@ -49,14 +52,7 @@ async def groups_api():
 
 @app.route("/api/events", methods=["GET"])
 async def events_api():
-    if "url" in request.args:
-        url = request.args["url"]
-        event = await Event.from_url(url)
-        if event is None:
-            return {"error": "event with specified url not found"}, 400
-
-        return event.to_dict()
-    elif all(arg in request.args for arg in ("category", "zip", "radius")):
+    if all(arg in request.args for arg in ("category", "zip", "radius")):
         category = request.args["category"]
         zip = request.args["zip"]
         radius = request.args["radius"]
@@ -72,7 +68,7 @@ async def events_api():
         if category not in ("environment", "mental_health", "lgbtq", "diversity_inclusion"):
             return {"error": "category must be one of (environment, mental_health, lgbtq, diversity_inclusion)"}, 400
 
-        category = GroupCategory[category]
+        category = Category[category]
 
         events = await Event.search(category, zip, radius)
         return json.dumps([e.to_dict() for e in events])
