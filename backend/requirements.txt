@@ -1,3 +1,4 @@
 beautifulsoup4==4.9.3
 playwright==1.9.2
+pytz==2021.1
 quart==0.14.1

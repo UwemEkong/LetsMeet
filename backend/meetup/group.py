@@ -1,15 +1,14 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from enum import Enum
-import re
 from typing import List, Optional
 
 from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
 
 from .event import Event
-
 
 GROUP_URL = "https://www.meetup.com/find/{}/?allMeetups=true&userFreeform={}&radius={}"
 
@@ -28,6 +27,7 @@ class Group:
     image_url: str
     members: int
 
+    location: Optional[str]
     description: Optional[str]
     events: Optional[List[Event]]
 
@@ -37,7 +37,8 @@ class Group:
             "url": self.url,
             "image_url": self.image_url,
             "members": self.members,
-            "description": self.description
+            "description": self.description,
+            "location": self.location
         }
         ret["events"] = [e.to_dict() for e in self.events] if self.events is not None else None
         return ret
@@ -155,8 +156,9 @@ class Group:
             return
 
         desc = Group._extract_desc_from_page(soup)
-        if not desc:
-            return
+
+        location = soup.find("a", class_="groupHomeHeaderInfo-cityLink").find("span")
+        location = location.text.strip()
 
         return Group(
             name=name,
@@ -164,6 +166,7 @@ class Group:
             image_url=image_url,
             members=members,
             description=desc,
+            location=location,
             events=Event.from_group_page(soup)
         )
 
@@ -209,6 +212,7 @@ class Group:
                 image_url=image_url,
                 members=members,
                 description=None,
+                location=None,
                 events=None
             ))
 

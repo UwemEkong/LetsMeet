@@ -1,8 +1,13 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
+from datetime import datetime
+from typing import List, Optional
 
+import pytz
+from bs4 import BeautifulSoup
+from playwright.async_api import async_playwright
 
 EVENT_URL = "https://www.meetup.com/find/events/{}/?allMeetups=true&userFreeform={}&radius={}"
 
@@ -14,7 +19,7 @@ class Event:
     description: Optional[str]
     group_url: str
     url: str
-    location: str
+    location: Optional[str]
     attendees: int
 
     def to_dict(self):
@@ -103,5 +108,110 @@ class Event:
         return events
 
     @classmethod
-    async def search(cls, category, zip: int, radius: str, when: Tuple[int, int, int]) -> List[Event]:
-        pass
+    async def from_url(cls, url: str) -> Event:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
+            page = await browser.new_page()
+            await page.goto(url)
+            content = await page.content()
+            await browser.close()
+
+        soup = BeautifulSoup(content, "html.parser")
+
+        title_elem = soup.find("h1", class_="pageHead-headline")
+        title = title_elem.text.strip()
+
+        desc_element = soup.find("div", class_="event-description")
+        desc = None
+        if desc_element:
+            p_elem = desc_element.find("p")
+            if p_elem:
+                desc = p_elem.text.strip()
+
+        time = soup.find("time")
+        time = int(time["datetime"])
+
+        location_elem = soup.find("address")
+        location = None
+        if location_elem:
+            p_elem = location_elem.find("p")
+            if p_elem:
+                location = p_elem.text.strip()
+
+        group_url_elem = soup.find("a", class_="event-group")
+        group_url = f"https://meetup.com{group_url_elem['href']}"
+
+        attendee_header = soup.find("h3", class_="attendees-sample-total").find("span")
+        attendee_re = re.search(r"Attendees \((\d+)\)", attendee_header.text.strip())
+        attendees = attendee_re.group(1)
+
+        return cls(
+            name=title,
+            description=desc,
+            time=time,
+            url=url,
+            group_url=group_url,
+            attendees=attendees,
+            location=location
+        )
+
+    @classmethod
+    async def search(cls, category, zip: int, radius: str) -> List[Event]:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
+            page = await browser.new_page()
+            await page.goto(EVENT_URL.format(category, zip, radius))
+            content = await page.content()
+            await browser.close()
+
+        soup = BeautifulSoup(content, "html.parser")
+
+        events = []
+        for chunk in soup.find_all("li", class_="event-listing"):
+            # Extract name of event
+            name_elem = chunk.find("span", itemprop="name")
+            if not name_elem:
+                continue
+            name = name_elem.text.strip()
+
+            # Extract time of event
+            dt = chunk.find("time", itemprop="startDate")
+            dt = datetime.strptime(dt["datetime"], r"%Y-%m-%dT%H:%M:%S%z")
+            utc_dt = dt.astimezone(pytz.utc)
+            time = utc_dt.timestamp() * 1000
+
+            # Extract link to group
+            group_link_label = chunk.find("div", class_="text--labelSecondary")
+            if not group_link_label:
+                continue
+            link_elem = group_link_label.find("a")
+            if not link_elem or not link_elem.get("href"):
+                continue
+            group_url = link_elem["href"]
+
+            # Extract link to event
+            event_link_elem = chunk.find("a", itemprop="url")
+            if not event_link_elem or not event_link_elem.get("href"):
+                continue
+            url = event_link_elem["href"]
+
+            # Extract attendee count
+            attendee_elem = chunk.find("div", class_="attendee-count")
+            if not attendee_elem:
+                continue
+            number_part, *_ = attendee_elem.text.strip().split(" ")
+            if not number_part.isdigit():
+                continue
+            attendees = int(number_part)
+
+            events.append(cls(
+                name=name,
+                description=None,
+                time=time,
+                group_url=group_url,
+                url=url,
+                location=None,
+                attendees=attendees
+            ))
+
+        return events
