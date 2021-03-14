@@ -53,7 +53,7 @@ const EventsPage = ({ results, setResults, formParams }) => {
                             <h3><a class="nav-link active">Events</a></h3>
                         </li>
                         <li class="nav-item">
-                            <h3><a class="nav-link" onClick={getGroups}>Groups</a></h3>
+                            <h3 style={{cursor:"pointer"}}><a class="nav-link" onClick={getGroups}>Groups</a></h3>
                         </li>
                     </ul>
                 </div>

@@ -30,7 +30,7 @@ const GroupsPage = ({ results, setResults, formParams }) => {
                 <div className="mx-auto text-center mb-3">
                     <ul className="nav nav-tabs nav-fill">
                         <li class="nav-item">
-                            <h3><a class="nav-link" onClick={getEvents}>Events</a></h3>
+                            <h3 style={{cursor:"pointer"}}><a class="nav-link" onClick={getEvents}>Events</a></h3>
                         </li>
                         <li class="nav-item">
                             <h3><a class="nav-link active">Groups</a></h3>
