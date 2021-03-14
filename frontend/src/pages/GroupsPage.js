@@ -4,9 +4,12 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 
-const GroupsPage = ({results, setResults, formParams}) => {
+const GroupsPage = ({ results, setResults, formParams }) => {
 
     const history = useHistory();
+
+    if (results.length === 0)
+        history.push("/categories");
 
     const getEvents = () => {
         axios.get(
@@ -23,30 +26,32 @@ const GroupsPage = ({results, setResults, formParams}) => {
 
     return (
         <>
-         <div style={{display:"flex"}} className="container">
-            <div style={{flex:"1", marginLeft:"320px", cursor:"pointer"}}>
-            <h1 onClick={getEvents} styles={{cursor:"pointer"}}>Events </h1>
-            </div>
-            <div>
-        <h1 style={{color:"blue",flex:"1", marginRight:"350px"}} > <u>| Groups</u></h1>
-            </div>
-        </div>
+            <div className="container">
+                <div className="mx-auto text-center mb-3">
+                    <ul className="nav nav-tabs nav-fill">
+                        <li class="nav-item">
+                            <h3><a class="nav-link" onClick={getEvents}>Events</a></h3>
+                        </li>
+                        <li class="nav-item">
+                            <h3><a class="nav-link active">Groups</a></h3>
+                        </li>
+                    </ul>
+                </div>
 
-        <div className="container">
-        {results.map((group) => {
-            return (
-                <Group
-                    name={group.name}
-                    url={group.url}
-                    image_url = {group.image_url}
-                    members={group.members}
-                    description={group.description}
-                    events= {group.events}
-                    />
-            )
-        })}
-    </div>
-    </>)
+                {results.map((group) => {
+                    return (
+                        <Group
+                            name={group.name}
+                            url={group.url}
+                            image_url={group.image_url}
+                            members={group.members}
+                            description={group.description}
+                            events={group.events}
+                        />
+                    )
+                })}
+            </div>
+        </>)
 }
 
 export default GroupsPage;
