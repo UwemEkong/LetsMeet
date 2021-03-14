@@ -1,30 +1,29 @@
 import React, { useState } from 'react';
 import Group from '../components/Group';
-import sampleImage from '../assets/health.svg';
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
+import { Button } from 'react-bootstrap';
 
-const GroupsPage = () => {
+const GroupsPage = ({results, setResults, formParams}) => {
 
-    let GROUPS = [{
-        "name": "My Group",
-        "url": "https://hackmerced.com/#/",
-        "image_url": sampleImage,
-        "members": 4,
-        "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. readable English.",
-        "events": [1, 2, 3]
-    }, {
-        "name": "My Group",
-        "url": "https://hackmerced.com/#/",
-        "image_url": sampleImage,
-        "members": 4,
-        "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. readable English.",
-        "events": [1, 2, 3]
-    }]
+    const history = useHistory();
 
-
+    const getEvents = () => {
+        axios.get(
+            '/api/events',
+            {
+                params: formParams
+            }
+        ).then((resp) => {
+            setResults(resp.data); // list of results
+            history.push("/events")
+        })
+    }
 
 
     return (<div className="container">
-        {GROUPS.map((group) => {
+        <Button onClick={getEvents}>events</Button>
+        {results.map((group) => {
             return (
                 <Group
                     name={group.name}

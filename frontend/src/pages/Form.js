@@ -12,7 +12,7 @@ const ButtonOrLoading = (isSearching) => {
     return (<Button type="submit">Search</Button>);
 }
 
-const Form = ({setEventResults}) => {
+const Form = ({setResults, setFormParams}) => {
 
   const history = useHistory();
 
@@ -34,17 +34,20 @@ const Form = ({setEventResults}) => {
     setValidated(true);
     setIsSearching(true);
 
+    let params = {
+      category: form.category.value,
+      zip: form.zip.value,
+      radius: form.radius.value
+    }
+    setFormParams(params);
+
     axios.get(
       '/api/events',
       {
-        params: {
-          category: form.category.value,
-          zip: form.zip.value,
-          radius: form.radius.value
-        }
+        params: params
       }
     ).then((resp) => {
-      setEventResults(resp.data); // list of results
+      setResults(resp.data); // list of results
       history.push("/events")
     })
   }

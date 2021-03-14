@@ -9,11 +9,11 @@ const Event = ({ name, time, description, group_url, url, location, attendees, i
     time = convertUnix(time).toUpperCase();
     name = name.toUpperCase();
     return (
-        <div style={{ borderTop: "2px solid gray", marginBottom: "20px" }} class="container">
-            <div style={{marginTop:"20px"}} class="row">
-                <div style={{marginTop:"20px",height:"200px",border:"4px solid black", borderRadius: "10px",backgroundImage:`url(${image})`, backgroundSize:"contain", backgroundRepeat:"no-repeat", backgroundPosition:"center"}} class="col-2">
+        <div style={{ borderTop: "2px solid gray", marginBottom: "20px" }} className="container">
+            <div style={{marginTop:"20px"}} className="row">
+                <div style={{marginTop:"20px",height:"200px",border:"4px solid black", borderRadius: "10px",backgroundImage:`url(${image})`, backgroundSize:"contain", backgroundRepeat:"no-repeat", backgroundPosition:"center"}} className="col-2">
                 </div>
-                <div class="col-10">
+                <div className="col-10">
                     <p style={{fontSize:"24px", color:"#737373"}} >Start Time: {time}<br/></p>
                     <h1 style={{fontWeight:"bold"}}>{name}<br/></h1>
                     <p style={{fontSize:"30px", color:"#737373"}}> {description}<br/></p>
