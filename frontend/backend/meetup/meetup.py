@@ -209,12 +209,14 @@ class Group:
 
             chap = group["chapstickGroup"]
 
+            image_url = chap["groupPhoto"]["base"] + chap["groupPhoto"]["id"]
+
             groups.append(cls(
                 name=chap["name"],
                 description=description,
                 url=chap["link"],
                 location=f"{chap['city'], {chap['state']}}",
-                image_url=chap["groupPhoto"]["baseUrl"],
+                image_url=image_url,
                 members=group["stats"]["memberCounts"]["all"]
             ))
 
@@ -264,7 +266,7 @@ class Event:
 
             image_url = None
             if node["images"]:
-                image_url = node["images"][0]["baseUrl"]
+                image_url = node["images"][0]["baseUrl"] + node["images"][0]["id"]
 
             soup = BeautifulSoup(node["description"], "html.parser")
             description = soup.get_text()
