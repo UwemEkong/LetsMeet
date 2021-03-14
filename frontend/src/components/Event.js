@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import React, { useState } from 'react';
 
 
 function convertUnix(unix_timestamp) {
@@ -9,10 +9,10 @@ function convertUnix(unix_timestamp) {
     var minutes = "0" + date.getMinutes();
     // Seconds part from the timestamp
     var seconds = "0" + date.getSeconds();
-    
+
     // Will display time in 10:30:23 format
     var formattedTime = hours + ':' + minutes.substr(-2) + ' pm' + ' CST';
-    
+
     return formattedTime;
 }
 const Event = ({ name, time, description, group_url, url, location, attendees, image }) => {
@@ -29,7 +29,7 @@ const Event = ({ name, time, description, group_url, url, location, attendees, i
                     <p style={{fontSize:"30px", color:"#737373"}}> {description}<br/></p>
                     <p style={{fontSize:"24px"}}>{attendees} attendees</p>
                 </div>
-               
+
             </div>
         </div>
     )

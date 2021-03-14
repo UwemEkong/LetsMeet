@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import React, { useState } from 'react';
 import Event from '../components/Event';
 import sampleImage from '../assets/environment.svg';
 

@@ -1,12 +1,17 @@
 import json
 
-from quart import Quart, request
+from quart import Quart, request, render_template
 
 from backend.meetup.event import Event
 
 from .meetup import Group, GroupCategory
 
 app = Quart(__name__)
+
+
+@app.errorhandler(404)
+async def not_found(err):
+    return await render_template("index.html")
 
 
 @app.route("/api/groups", methods=["GET"])

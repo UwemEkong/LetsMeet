@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import React, { useState } from 'react';
 
 const Group = ({ name, url, image_url, members, description, events }) => {
 

@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import React, { useState } from 'react';
 import '../styles/categorystyles.css';
 import { Card, Container, Row, Col } from "react-bootstrap";
 import environment from "../assets/environment.svg";

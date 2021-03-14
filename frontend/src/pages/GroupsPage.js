@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import React, { useState } from 'react';
 import Group from '../components/Group';
 import sampleImage from '../assets/health.svg';
 

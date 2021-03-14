@@ -13,7 +13,7 @@ function App() {
       <Route exact path="/">
         <Home/>
       </Route>
-      <Route path="/categories" component={Category} /> 
+      <Route path="/categories" component={Category} />
 
       <Route path="/form/:category">
         <Form/>
