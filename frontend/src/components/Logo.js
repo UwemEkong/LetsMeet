@@ -1,15 +1,16 @@
 import React from 'react'
 import logo from '../assets/logo.svg';
-import {Link} from "react-router-dom";
 
-const Logo = () =>{
-    
+const Logo = () => {
     return (
         <>
-    <div className="container-fluid">
-     <p style={{fontFamily:"arial,helvetica", fontSize:"40px"}}><Link to="/"><img style={{}} src={logo} width="100" height="100"/></Link>LetsMeet</p>
-    </div>
-    </>)
+            <nav className="navbar navbar-light bg-light">
+                <a style={{ fontFamily: "arial,helvetica", fontSize: "40px" }} className="navbar-brand" href="/">
+                    <img className="d-inline-block align-middle" src={logo} width="100" height="100" alt="Logo" />
+                    <span className="ml-3">LetsMeet</span>
+                </a>
+            </nav>
+        </>)
 }
 
 export default Logo

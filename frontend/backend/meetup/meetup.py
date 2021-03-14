@@ -297,4 +297,6 @@ class Event:
 
             done_ids.add(node["id"])
 
+        events.sort(key=lambda e: e.time)
+
         return events

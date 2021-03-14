@@ -1,23 +1,33 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import '../styles/categorystyles.css';
-import { Card, Container, Row, Col } from "react-bootstrap";
+import { Card, Container, Row, Col, Carousel } from "react-bootstrap";
 import environment from "../assets/environment.svg";
 import diversity from "../assets/diversity.svg";
 import health from "../assets/health.svg";
 import lgbt from "../assets/lgbt.svg";
-import {Link} from "react-router-dom";
+import Form from "./Form";
 
-const Category = () => {
+const Next = ({ category, setCarouselIndex }) => {
+
+    const update = () => {
+        setCarouselIndex(1);
+    }
+
+    if (category)
+        return (<a className="btn btn-primary btn-lg" onClick={update}>Next</a>);
+    else
+        return (<a className="btn btn-outline-primary btn-lg disabled" title="Please select a category.">Next</a>)
+}
+
+const Category = ({ setResults, setFormParams }) => {
 
     const [selected, setSelected] = useState(-1);
-
+    const [carouselIndex, setCarouselIndex] = useState(0);
     const [category, setCategory] = useState("");
 
     const clickHandler1 = () => {
-
         setSelected(0)
         setCategory("environment")
-        
     }
 
     const clickHandler2 = () => {
@@ -36,80 +46,56 @@ const Category = () => {
     }
 
     return (
-        <>
-            <h1 style={{marginBottom:"5%", marginTop:"2px"}} className="category-h1">Please Select A Category</h1>
-            <Container>
-                <Row style={{marginBottom: "40px", marginLeft: "30%"}}>
-                    <Col style={{marginRight: "60px"}} xs={3}>
-                        <Card style={ selected === 0 ? {borderColor:"blue", borderWidth:"5px", borderRadius:"10px"} : {}} onClick={clickHandler1}>
-                            <Card.Img variant="top" src={environment} />
-                            <Card.Body>
-                            <Card.Title style={{textAlign:"center"}}>Environment</Card.Title>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col xs={3}>
-                    <Card style={ selected === 1 ? {borderColor:"blue", borderWidth:"5px", borderRadius:"10px"} : {}} onClick={clickHandler2}>
-                            <Card.Img variant="top" src={diversity} />
-                            <Card.Body>
-                            <Card.Title style={{textAlign:"center"}}>Diversity </Card.Title>
-                            </Card.Body>
-                        </Card>
-                </Col>
-                </Row>
-                <Row style={{marginLeft: "30%"}}>
-                    <Col style={{marginRight: "60px"}} xs={3}>
-                    <Card style={ selected === 2 ? {borderColor:"blue", borderWidth:"5px", borderRadius:"10px"} : {}} onClick={clickHandler3}>
-                            <Card.Img variant="top" src={health} />
-                            <Card.Body>
-                            <Card.Title style={{textAlign:"center"}}>Mental Health</Card.Title>
-                            </Card.Body>
-                        </Card>
-                </Col>
-                    <Col xs={3}>
-                    <Card style={ selected === 3 ? {borderColor:"blue", borderWidth:"5px", borderRadius:"10px"} : {}} onClick={clickHandler4}>
-                            <Card.Img variant="top" src={lgbt} />
-                            <Card.Body>
-                            <Card.Title style={{textAlign:"center"}}>LGBTQ+</Card.Title>
-                            </Card.Body>
-                        </Card>
-                </Col>
-                </Row>
-                
-                <Link to={"/form/" + category}><button style={{marginLeft:"80%"}}type="button" className="btn btn-primary btn-lg">Next</button></Link>
-             
-            </Container>
-        
-
-
-            {/* <div className="container">
-            <div className="row">
-               <div className="col 5">
-                <div className="card" >
-                    <img src="..." className="card-img-top" alt="..."/>
-                    <div className="card-body">
-                        <h5 className="card-title">Card 1</h5>
-                        <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" className="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-                </div>
-                <div className="col 5">
-                <div className="card">
-                    <img src="..." className="card-img-top" alt="..."/>
-                    <div className="card-body">
-                        <h5 className="card-title">Card 2</h5>
-                        <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" className="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-                </div>
-              </div>
-        </div> */}
-        </>
-        
+        <Carousel activeIndex={carouselIndex} controls={false} indicators={false} interval={0} keyboard={false} touch={false} pause={false}>
+            <Carousel.Item>
+                <h1 className="category-h1 my-4">Please Select A Category</h1>
+                <Container className="mx-auto">
+                    <Row>
+                        <Col xs={3} style={{padding: "10px"}}>
+                            <Card style={selected === 0 ? { borderColor: "blue", borderWidth: "5px", borderRadius: "10px" } : { cursor: "pointer" }} onClick={clickHandler1}>
+                                <Card.Img variant="top" style={{ userSelect: "none" }} src={environment} draggable={false} />
+                                <Card.Body>
+                                    <Card.Title style={{ textAlign: "center", userSelect: "none" }}>Environment</Card.Title>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        <Col xs={3} style={{padding: "10px"}}>
+                            <Card style={selected === 1 ? { borderColor: "blue", borderWidth: "5px", borderRadius: "10px" } : { cursor: "pointer" }} onClick={clickHandler2}>
+                                <Card.Img variant="top" style={{ userSelect: "none" }} src={diversity} draggable={false} />
+                                <Card.Body>
+                                    <Card.Title style={{ textAlign: "center", userSelect: "none" }}>Diversity</Card.Title>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        <Col xs={3} style={{padding: "10px"}}>
+                            <Card style={selected === 2 ? { borderColor: "blue", borderWidth: "5px", borderRadius: "10px" } : { cursor: "pointer" }} onClick={clickHandler3}>
+                                <Card.Img variant="top" style={{ userSelect: "none" }} src={health} draggable={false} />
+                                <Card.Body>
+                                    <Card.Title style={{ textAlign: "center", userSelect: "none" }}>Mental Health</Card.Title>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        <Col xs={3} style={{padding: "10px"}}>
+                            <Card style={selected === 3 ? { borderColor: "blue", borderWidth: "5px", borderRadius: "10px" } : { cursor: "pointer" }} onClick={clickHandler4}>
+                                <Card.Img variant="top" style={{ userSelect: "none" }} src={lgbt} draggable={false} />
+                                <Card.Body>
+                                    <Card.Title style={{ textAlign: "center", userSelect: "none" }}>LGBTQ+</Card.Title>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
+                    <Row className="mt-5">
+                        <Col className="text-center">
+                            <Next category={category} setCarouselIndex={setCarouselIndex}></Next>
+                        </Col>
+                    </Row>
+                </Container>
+            </Carousel.Item>
+            <Carousel.Item>
+                <Form setResults={setResults} setFormParams={setFormParams} category={category} />
+            </Carousel.Item>
+        </Carousel>
     )
-    
 }
 
 export default Category;

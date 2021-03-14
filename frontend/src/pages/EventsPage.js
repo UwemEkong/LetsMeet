@@ -35,7 +35,6 @@ const EventsPage = ({ results, setResults, formParams }) => {
             "70%," +
             "80%,1)";
     }
-    
 
     return (
         <>
@@ -44,7 +43,7 @@ const EventsPage = ({ results, setResults, formParams }) => {
                     <Modal.Title>{highlighted.name}</Modal.Title>
                 </Modal.Header>
                 <Modal.Header>
-                    <Image  style={{backgroundColor:getColor(), backgroundImage: `url(${highlighted.image_url})`,width:"200px",height:"200px", margin:"auto" }} src={highlighted.image_url} thumbnail />
+                    <Image style={{backgroundColor:getColor(), backgroundImage: `url(${highlighted.image_url})`,width:"200px",height:"200px", margin:"auto" }} src={highlighted.image_url} thumbnail />
                 </Modal.Header>
                 <Modal.Body>{highlighted.description}</Modal.Body>
                 <Modal.Footer>
@@ -63,8 +62,8 @@ const EventsPage = ({ results, setResults, formParams }) => {
                         <li className="nav-item">
                             <h3><a className="nav-link active">Events</a></h3>
                         </li>
-                        <li class="nav-item">
-                            <h3 style={{ cursor: "pointer" }}><a class="nav-link" onClick={getGroups}>Groups</a></h3>
+                        <li className="nav-item">
+                            <h3 style={{ cursor: "pointer" }}><a className="nav-link" onClick={getGroups}>Groups</a></h3>
                         </li>
                     </ul>
                 </div>

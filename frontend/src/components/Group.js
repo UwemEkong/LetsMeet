@@ -20,9 +20,9 @@ const Group = ({ group, setHighlighted }) => {
     return (
         <div onClick={update} style={{ borderTop: "2px solid gray", marginBottom: "20px", cursor: "pointer" }} className="container">
             <div style={{marginTop:"20px"}} className="row">
-                <div style={{marginTop:"20px",height:"200px",width:"200px",border:"4px solid black", borderRadius: "10px",backgroundImage:`url(${group.image_url})`, backgroundColor: getColor(), backgroundSize:"contain", backgroundRepeat:"no-repeat", backgroundPosition:"center"}} className="col-2">
+                <div style={{marginTop:"20px",maxHeight:"200px",maxWidth:"200px",border:"4px solid black", borderRadius: "10px",backgroundImage:`url(${group.image_url})`, backgroundColor: getColor(), backgroundSize:"contain", backgroundRepeat:"no-repeat", backgroundPosition:"center"}} className="col-3">
                 </div>
-                <div className="col-10">
+                <div className="col-9">
                     <h1 style={{fontWeight:"bold"}}>{name}<br/></h1>
                     <p style={{fontSize:"30px", color:"#737373"}}> {truncate(group.description, 128)}<br/></p>
                     <p style={{fontSize:"24px"}}>{group.members} members | Public</p>

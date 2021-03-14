@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
+import Image from 'react-bootstrap/Image'
 
 const GroupsPage = ({ results, setResults, formParams }) => {
 
@@ -40,7 +41,7 @@ const GroupsPage = ({ results, setResults, formParams }) => {
                     <Modal.Title>{highlighted.name}</Modal.Title>
                 </Modal.Header>
                 <Modal.Header>
-                    <Image  style={{backgroundColor:getColor(), backgroundImage: `url(${highlighted.image_url})`,width:"200px",height:"200px", margin:"auto" }} src={highlighted.image_url} thumbnail />
+                    <Image style={{backgroundColor:getColor(), backgroundImage: `url(${highlighted.image_url})`,width:"200px",height:"200px", margin:"auto" }} src={highlighted.image_url} thumbnail />
                 </Modal.Header>
                 <Modal.Body>{highlighted.description}</Modal.Body>
                 <Modal.Footer>
@@ -56,8 +57,8 @@ const GroupsPage = ({ results, setResults, formParams }) => {
             <div className="container">
                 <div className="mx-auto text-center mb-3">
                     <ul className="nav nav-tabs nav-fill">
-                        <li class="nav-item">
-                            <h3 style={{cursor:"pointer"}}><a class="nav-link" onClick={getEvents}>Events</a></h3>
+                        <li className="nav-item">
+                            <h3 style={{cursor:"pointer"}}><a className="nav-link" onClick={getEvents}>Events</a></h3>
                         </li>
                         <li className="nav-item">
                             <h3><a className="nav-link active">Groups</a></h3>
