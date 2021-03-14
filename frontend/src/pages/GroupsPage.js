@@ -21,8 +21,18 @@ const GroupsPage = ({results, setResults, formParams}) => {
     }
 
 
-    return (<div className="container">
-        <Button onClick={getEvents}>events</Button>
+    return (
+        <>
+         <div style={{display:"flex"}} className="container">
+            <div style={{flex:"1", marginLeft:"320px", cursor:"pointer"}}>
+            <h1 onClick={getEvents} styles={{cursor:"pointer"}}>Events </h1>
+            </div>
+            <div>
+        <h1 style={{color:"blue",flex:"1", marginRight:"350px"}} > <u>| Groups</u></h1>
+            </div>
+        </div>
+
+        <div className="container">
         {results.map((group) => {
             return (
                 <Group
@@ -35,7 +45,8 @@ const GroupsPage = ({results, setResults, formParams}) => {
                     />
             )
         })}
-    </div>)
+    </div>
+    </>)
 }
 
 export default GroupsPage;
