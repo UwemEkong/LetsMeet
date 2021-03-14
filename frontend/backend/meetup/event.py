@@ -95,12 +95,20 @@ class Event:
                 continue
             attendees = int(number_part)
 
+            img_span = page.find("span", role="img")
+            image_url = None
+            if not img_span:
+                image_re = re.search(r"background-image: url\((.+)\)", img_span["style"])
+                if image_re is not None:
+                    image_url = image_url.group(1)
+
             events.append(cls(
                 name=name,
                 time=time,
                 description=desc,
                 url=url,
                 group_url=group_link,
+                image_url=image_url,
                 location=location,
                 attendees=attendees
             ))
