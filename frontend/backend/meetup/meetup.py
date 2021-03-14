@@ -5,6 +5,7 @@ from enum import Enum
 import re
 from typing import List
 import pytz
+from bs4 import BeautifulSoup
 
 from dataclasses import dataclass
 from quart import current_app as app
@@ -203,11 +204,14 @@ class Group:
             if group["id"] in done_ids:
                 continue
 
+            soup = BeautifulSoup(group.get("description", ""), "html.parser")
+            description = soup.get_text()
+
             chap = group["chapstickGroup"]
 
             groups.append(cls(
                 name=chap["name"],
-                description=group.get("description", ""),
+                description=description,
                 url=chap["link"],
                 location=f"{chap['city'], {chap['state']}}",
                 image_url=chap["groupPhoto"]["baseUrl"],
@@ -262,6 +266,9 @@ class Event:
             if node["images"]:
                 image_url = node["images"][0]["baseUrl"]
 
+            soup = BeautifulSoup(node["description"], "html.parser")
+            description = soup.get_text()
+
             if node["eventType"] == "online":
                 location = "Online"
             else:
@@ -273,7 +280,7 @@ class Event:
 
             events.append(cls(
                 name=node["title"],
-                description=node["description"],
+                description=description,
                 image_url=image_url,
                 url=node["eventUrl"],
                 group_url=node["group"]["chapstickGroup"]["link"],
