@@ -5,7 +5,9 @@ import '../styles/formstyles.css';
 const Form = () => {
     return (
       <>
+      
       <div className="container">
+      <h1 style={{fontWeight:"bold"}}>Before We Can Connect You To Your Community, we just need a little information</h1>
       <form>
       <label for="fname"><h1>Please Enter your zip code</h1></label>
       <input type="text" id="fname" name="fname" placeholder="Zip Code"/>

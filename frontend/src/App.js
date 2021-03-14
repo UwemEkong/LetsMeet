@@ -5,11 +5,15 @@ import Category from './pages/Category';
 import Form from './pages/Form';
 import EventsPage from './pages/EventsPage';
 import GroupsPage from './pages/GroupsPage';
+import Logo from './components/Logo';
 
 function App() {
   return (
+   
     <Router>
+       <Logo/>
       <Switch>
+        
       <Route exact path="/">
         <Home/>
       </Route>
@@ -26,6 +30,7 @@ function App() {
       </Route>
       </Switch>
     </Router>
+  
   )
 }
 

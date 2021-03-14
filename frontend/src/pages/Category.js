@@ -31,14 +31,13 @@ const Category = () => {
     }
 
     const clickHandler4 = () => {
-        //chosenCategory="lgbtq"
         setSelected(3)
         setCategory("lgbtq")
     }
 
     return (
         <>
-            <h1 style={{marginBottom:"5%", marginTop:"5%"}} className="category-h1">Please Select A Category</h1>
+            <h1 style={{marginBottom:"5%", marginTop:"2px"}} className="category-h1">Please Select A Category</h1>
             <Container>
                 <Row style={{marginBottom: "40px", marginLeft: "30%"}}>
                     <Col style={{marginRight: "60px"}} xs={3}>
