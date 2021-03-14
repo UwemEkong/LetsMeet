@@ -178,7 +178,7 @@ class Event:
             dt = chunk.find("time", itemprop="startDate")
             dt = datetime.strptime(dt["datetime"], r"%Y-%m-%dT%H:%M:%S%z")
             utc_dt = dt.astimezone(pytz.utc)
-            time = utc_dt.timestamp() * 1000
+            time = int(utc_dt.timestamp() * 1000)
 
             # Extract link to group
             group_link_label = chunk.find("div", class_="text--labelSecondary")
@@ -199,7 +199,8 @@ class Event:
             attendee_elem = chunk.find("div", class_="attendee-count")
             if not attendee_elem:
                 continue
-            number_part, *_ = attendee_elem.text.strip().split(" ")
+            attendee_text = re.search(r"\d+", attendee_elem.text.strip())
+            number_part = attendee_text.group(0)
             if not number_part.isdigit():
                 continue
             attendees = int(number_part)
