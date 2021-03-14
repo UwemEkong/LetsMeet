@@ -282,7 +282,7 @@ class Event:
 
             start = datetime.strptime(node["dateTime"], r"%Y-%m-%dT%H:%M%z")
             utc_dt = start.astimezone(pytz.utc)
-            time = int(utc_dt.timestamp() * 100)
+            time = int(utc_dt.timestamp() * 1000)
 
             events.append(cls(
                 name=node["title"],
